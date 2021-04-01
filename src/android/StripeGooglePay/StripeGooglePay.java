@@ -87,7 +87,12 @@ public class StripeGooglePay extends CordovaPlugin {
             // This is the raw JSON string version of your Stripe token.
             String rawToken = paymentData.getPaymentMethodToken().getToken();
 
-            JSONObject jsonObject = new JSONObject(rawToken);
+            try {
+			     JSONObject jsonObject = new JSONObject(rawToken);
+			} catch (JSONException err) {
+			     //Log.d("Error", err.toString());
+			     this.callback.error("An error occurred: "+err.toString());
+			}
 
             // Now that you have a Stripe token object, charge that by using the id
             Token stripeToken = Token.fromJson(jsonObject);
