@@ -89,21 +89,22 @@ public class StripeGooglePay extends CordovaPlugin {
 
             try {
 			     JSONObject jsonObject = new JSONObject(rawToken);
+
+				 // Now that you have a Stripe token object, charge that by using the id
+				 Token stripeToken = Token.fromJson(jsonObject);
+				 if (stripeToken != null) {
+				   // This chargeToken function is a call to your own server, which should then connect
+				   // to Stripe's API to finish the charge.
+				   //chargeToken(stripeToken.getId());
+				   this.callback.success(stripeToken.getId());
+				 } else {
+				   this.callback.error("An error occurred");
+            	 }
 			} catch (JSONException err) {
 			     //Log.d("Error", err.toString());
 			     this.callback.error("An error occurred: "+err.toString());
 			}
 
-            // Now that you have a Stripe token object, charge that by using the id
-            Token stripeToken = Token.fromJson(jsonObject);
-            if (stripeToken != null) {
-              // This chargeToken function is a call to your own server, which should then connect
-              // to Stripe's API to finish the charge.
-              //chargeToken(stripeToken.getId());
-              this.callback.success(stripeToken.getId());
-            } else {
-              this.callback.error("An error occurred");
-            }
             break;
           case Activity.RESULT_CANCELED:
             this.callback.error("Payment cancelled");
