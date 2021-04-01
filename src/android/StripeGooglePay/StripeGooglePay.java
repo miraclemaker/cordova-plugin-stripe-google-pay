@@ -29,6 +29,7 @@ import org.apache.cordova.CordovaWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -86,8 +87,10 @@ public class StripeGooglePay extends CordovaPlugin {
             // This is the raw JSON string version of your Stripe token.
             String rawToken = paymentData.getPaymentMethodToken().getToken();
 
+            JSONObject jsonObject = new JSONObject(rawToken);
+
             // Now that you have a Stripe token object, charge that by using the id
-            Token stripeToken = Token.fromString(rawToken);
+            Token stripeToken = Token.fromJson(jsonObject);
             if (stripeToken != null) {
               // This chargeToken function is a call to your own server, which should then connect
               // to Stripe's API to finish the charge.
